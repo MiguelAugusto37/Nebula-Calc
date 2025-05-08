@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula Calc</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --accent: #fd79a8;
+            --display: #dfe6e9;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .calculator {
+            width: 100%;
+            max-width: 340px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+        }
+        
+        .brand {
+            color: var(--light);
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .display {
+            background-color: var(--display);
+            padding: 15px 20px;
+            text-align: right;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        .display-input {
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: var(--dark);
+            word-wrap: break-word;
+            min-height: 45px;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        
+        .btn {
+            border: none;
+            outline: none;
+            padding: 18px 0;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: var(--dark);
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-operator {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-clear {
+            background-color: var(--accent);
+            color: white;
+            grid-column: span 2;
+        }
+        
+        .btn-equals {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            grid-row: span 2;
+        }
+        
+        .btn-number {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .btn-zero {
+            grid-column: span 1;
+        }
+        
+        .history {
+            color: rgba(45, 52, 54, 0.6);
+            font-size: 1rem;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="brand">NEBULA CALC</div>
+        <div class="display">
+            <div class="history" id="history"></div>
+            <div class="display-input" id="display">0</div>
+        </div>
+        <div class="buttons">
+            <button class="btn btn-clear" onclick="clearDisplay()">AC</button>
+            <button class="btn btn-operator" onclick="appendToDisplay('/')">÷</button>
+            <button class="btn btn-operator" onclick="appendToDisplay('*')">×</button>
+            <button class="btn btn-number" onclick="appendToDisplay('9')">9</button>
+        
+            
+            <button class="btn btn-number" onclick="appendToDisplay('7')">7</button>
+            <button class="btn btn-number" onclick="appendToDisplay('8')">8</button>
+            <button class="btn btn-operator" onclick="appendToDisplay('-')">-</button>
+            <button class="btn btn-number" onclick="appendToDisplay('6')">6</button>
+        
+            
+            <button class="btn btn-number" onclick="appendToDisplay('4')">4</button>
+            <button class="btn btn-number" onclick="appendToDisplay('5')">5</button>
+            <button class="btn btn-operator" onclick="appendToDisplay('+')">+</button>
+            <button class="btn btn-number" onclick="appendToDisplay('3')">3</button>
+            
+            
+            <button class="btn btn-number" onclick="appendToDisplay('1')">1</button>
+            <button class="btn btn-number" onclick="appendToDisplay('2')">2</button>
+            <button class="btn btn-equals" onclick="calculate()">=</button>
+            <button class="btn btn-number" onclick="appendToDisplay('.')">.</button> 
+            <button class="btn btn-number btn-zero" onclick="appendToDisplay('0')">0</button>
+            <button class="btn btn-number" onclick="appendToDisplay('/')">/</button>
+        </div>
+    </div>
+
+    <script>
+        let currentDisplay = '0';
+        let historyDisplay = '';
+        const display = document.getElementById('display');
+        const history = document.getElementById('history');
+        
+        function updateDisplay() {
+            display.textContent = currentDisplay;
+        }
+        
+        function updateHistory() {
+            history.textContent = historyDisplay;
+        }
+        
+        function appendToDisplay(value) {
+            if (currentDisplay === '0' && value !== '.') {
+                currentDisplay = value;
+            } else {
+                currentDisplay += value;
+            }
+            updateDisplay();
+        }
+        
+        function clearDisplay() {
+            currentDisplay = '0';
+            historyDisplay = '';
+            updateDisplay();
+            updateHistory();
+        }
+        
+        function calculate() {
+            try {
+                // Salva a operação no histórico
+                historyDisplay = currentDisplay + ' =';
+                
+                // Calcula o resultado
+                currentDisplay = eval(currentDisplay.replace(/×/g, '*').replace(/÷/g, '/')).toString();
+                
+                // Atualiza os displays
+                updateDisplay();
+                updateHistory();
+            } catch (error) {
+                currentDisplay = 'Erro';
+                updateDisplay();
+                setTimeout(clearDisplay, 1500);
+            }
+        }
+        
+        // Adiciona suporte para teclado
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            
+            if (/[0-9]/.test(key)) {
+                appendToDisplay(key);
+            } else if (key === '.') {
+                appendToDisplay('.');
+            } else if (key === '+' || key === '-' || key === '*') {
+                appendToDisplay(key);
+            } else if (key === '/') {
+                appendToDisplay('/');
+            } else if (key === 'Enter') {
+                calculate();
+            } else if (key === 'Escape') {
+                clearDisplay();
+            } else if (key === 'Backspace') {
+                currentDisplay = currentDisplay.slice(0, -1) || '0';
+                updateDisplay();
+            }
+        });
+    </script>
+</body>
+</html>
